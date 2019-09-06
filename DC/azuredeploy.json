@@ -10,7 +10,7 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_LRS",
+            "defaultValue": "Standard_D2s_v3",
             "metadata": {
                 "description": "Size of the VM for the controller"
             }
