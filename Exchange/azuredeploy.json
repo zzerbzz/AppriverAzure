@@ -28,7 +28,7 @@
         "vmOsSku": "2019-Datacenter",
         "vmAdminUsername": "appriverAzure",
         "vmAdminPassword": "!96En0va$Azure",
-        "vmName": "[concat('vm', resourceGroup().name)]",
+        "vmName": "exdevVM",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
         "vmSize": "Standard_D3_v2",
