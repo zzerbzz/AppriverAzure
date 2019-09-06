@@ -3,16 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "adminUsername": {
-      "value": "AppriverAzure"
+      "value": ""
     },
     "adminPassword": {
-      "value": "!96En0va$Azure"
+      "value": ""
     },
     "domainName": {
-      "value": "EXGAppriverDEV.test"
+      "value": ""
     },
     "dnsPrefix": {
-      "value": "DEV"
+      "value": ""
     }
   }
 }
