@@ -64,7 +64,7 @@
             "properties": {
                 "publicIPAllocationMethod": "Static",
                 "dnsSettings": {
-                    "domainNameLabel": "[parameters('dnsPrefix')]"
+                    "domainNameLabel": "[variables('dnsPrefix')]"
                 }
             }
         },
@@ -203,7 +203,7 @@
                 },
                 "osProfile": {
                     "computerName": "[variables('adVMName')]",
-                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminUsername": "[variables('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
                 "storageProfile": {
@@ -260,9 +260,9 @@
                             "ModulesUrl": "[uri(parameters('_artifactsLocation'), concat('DSC/CreateADPDC.zip', parameters('_artifactsLocationSasToken')))]",
                             "ConfigurationFunction": "CreateADPDC.ps1\\CreateADPDC",
                             "Properties": {
-                                "DomainName": "[parameters('domainName')]",
+                                "DomainName": "[variables('domainName')]",
                                 "AdminCreds": {
-                                    "UserName": "[parameters('adminUsername')]",
+                                    "UserName": "[variables('adminUsername')]",
                                     "Password": "PrivateSettingsRef:AdminPassword"
                                 }
                             }
