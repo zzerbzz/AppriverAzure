@@ -4,31 +4,35 @@
     "parameters": {
         "adminUsername": {
             "type": "string",
+            "value": "AppriverAzure",
             "metadata": {
                 "description": "The name of the administrator account of the new VM and domain"
             }
         },
         "adminPassword": {
             "type": "securestring",
+            "value": "!96En0va$Azure",
             "metadata": {
                 "description": "The password for the administrator account of the new VM and domain"
             }
         },
         "domainName": {
             "type": "string",
+            "value": "EXGAppriverDEV.test",
             "metadata": {
                 "description": "The FQDN of the Active Directory Domain to be created"
             }
         },
         "dnsPrefix": {
             "type": "string",
+            "value": "DEV",
             "metadata": {
                 "description": "The DNS prefix for the public IP address used by the Load Balancer"
             }
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2s_v3",
+            "defaultValue": "Standard_LRS",
             "metadata": {
                 "description": "Size of the VM for the controller"
             }
