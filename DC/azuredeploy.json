@@ -2,28 +2,10 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "adminUsername": {
-            "type": "string",
-            "metadata": {
-                "description": "The name of the administrator account of the new VM and domain"
-            }
-        },
         "adminPassword": {
             "type": "securestring",
             "metadata": {
                 "description": "The password for the administrator account of the new VM and domain"
-            }
-        },
-        "domainName": {
-            "type": "string",
-            "metadata": {
-                "description": "The FQDN of the Active Directory Domain to be created"
-            }
-        },
-        "dnsPrefix": {
-            "type": "string",
-            "metadata": {
-                "description": "The DNS prefix for the public IP address used by the Load Balancer"
             }
         },
         "vmSize": {
@@ -56,6 +38,9 @@
         }
     },
     "variables": {
+        "adminUsername": "AppriverAzure",
+        "domainName": "EXGAppriverDEV.test",
+        "dnsPrefix": "exgappriverdev",
         "virtualNetworkName": "adVNET",
         "virtualNetworkAddressRange": "10.0.0.0/16",
         "adLBFE": "LBFE",
