@@ -93,3 +93,17 @@ function DownloadISO {
 }
 
 DownloadISO
+
+$disk = Get-Disk | where { $_.PartitionStyle -eq "RAW" }
+$diskNumber = $disk.Number
+Initialize-Disk -Number $diskNumber
+New-Partition -DiskNumber $diskNumber -UseMaximumSize -IsActive | Format-Volume -FileSystem NTFS -NewFileSystemLabel "DC" -confirm:$False
+Set-Partition -DiskNumber $diskNumber -PartitionNumber 1 -NewDriveLetter F
+
+Install-WindowsFeature Server-Media-Foundation, NET-Framework-45-Features, RPC-over-HTTP-proxy, RSAT-Clustering, RSAT-Clustering-CmdInterface, RSAT-Clustering-PowerShell, WAS-Process-Model, Web-Asp-Net45, Web-Basic-Auth, Web-Client-Auth, Web-Digest-Auth, Web-Dir-Browsing, Web-Dyn-Compression, Web-Http-Errors, Web-Http-Logging, Web-Http-Redirect, Web-Http-Tracing, Web-ISAPI-Ext, Web-ISAPI-Filter, Web-Metabase, Web-Mgmt-Service, Web-Net-Ext45, Web-Request-Monitor, Web-Server, Web-Stat-Compression, Web-Static-Content, Web-Windows-Auth, Web-WMI, RSAT-ADDS, BitLocker, snmp-Service, snmp-wmi-provider, Web-Scripting-Tools, Web-Server -IncludeManagementTools
+
+Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
+Import-Module ADDSDeployment
+$Pass = '!96En0va$Azure' | ConvertTo-SecureString -asPlainText -Force
+Install-ADDSForest -DomainName "EXGAppriverDEV.test" -DatabasePath "F:\NTDS" -SysvolPath "F:\SYSVOL" -LogPath "F:\Logs" -SafeModeAdministratorPassword $Pass -Force -confirm:$False
+
