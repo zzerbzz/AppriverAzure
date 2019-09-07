@@ -62,8 +62,22 @@ function DownloadISO {
         $driveLetter = ($image | Get-Volume).DriveLetter
 
         "Copy files to destination directory: $destination" | Tee-Object -FilePath $logFilePath -Append
-        Robocopy.exe ("{0}:" -f $driveLetter) $destination /E | Out-Null
-    
+		Robocopy.exe ("{0}:" -f $driveLetter) $destination /E | Out-Null
+		$ExchangeSetupPath = "C:\PreReq"
+		New-Item -Path $ExchangeSetupPath -ItemType Directory -Force
+		$UMCAPath = $ExchangeSetupPath + "\UcmaRuntimeSetup.exe"
+		$VCRedistPath = $ExchangeSetupPath + "\vcredist_x64.exe"
+		(New-Object Net.WebClient).DownloadFile('https://downloadscfa.blob.core.windows.net/downloads/Exchange/UcmaRuntimeSetup.exe', $UMCAPath)
+		(New-Object Net.WebClient).DownloadFile('https://downloadscfa.blob.core.windows.net/downloads/Exchange/vcredist_x64.exe', $VCRedistPath)
+		
+		##Install VCRedist
+		[string]$VisC2013Args = "/install /quiet /norestart /log C:\PreReq\VisualC_RedistributablePackages2013-install.txt"
+		Start-Process -FilePath $VCRedistPath -ArgumentList $VisC2013Args -Wait
+		
+		##Install UMCA
+		[string]$UMCAArgs = "/install /quiet /norestart /log C:\PreReq\UMCA.txt"
+		Start-Process -FilePath $UMCAPath -ArgumentList $UMCAArgs -Wait
+		
         "Dismount the image from $destinationFile" | Tee-Object -FilePath $logFilePath -Append
         Dismount-DiskImage -ImagePath $destinationFile
     
