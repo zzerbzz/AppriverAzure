@@ -83,6 +83,7 @@ function DownloadISO {
     
         "Delete the temp file: $destinationFile" | Tee-Object -FilePath $logFilePath -Append
 		Remove-Item -Path $destinationFile -Force
+		<#
 		$disk = Get-Disk | where { $_.PartitionStyle -eq "RAW" }
 		$diskNumber = $disk.Number
 		Initialize-Disk -Number $diskNumber
@@ -95,7 +96,8 @@ function DownloadISO {
 		Import-Module ADDSDeployment
 		$Pass = '!96En0va$Azure' | ConvertTo-SecureString -asPlainText -Force
 		Install-ADDSForest -DomainName "EXGAppriverDEV.test" -DatabasePath "F:\NTDS" -SysvolPath "F:\SYSVOL" -LogPath "F:\Logs" -SafeModeAdministratorPassword $Pass -Force -confirm:$False
-    }
+	#>
+	}
     else
     {
 		"Failed to download the file after exhaust retry limit" | Tee-Object -FilePath $logFilePath -Append
