@@ -8,6 +8,18 @@
             "metadata": {
                 "description": "Exchange Mailbox storage size in GB."
             }
+        },
+    "vmAdminUsername": {
+        "type": "string",
+        "metadata": {
+            "description": "The name of the administrator account of the new VM and domain"
+            }
+        },
+    "vmAdminPassword": {
+        "type": "securestring",
+        "metadata": {
+            "description": "The password for the administrator account of the new VM and domain"
+            }
         }
     },
     "variables": {
@@ -26,8 +38,6 @@
         "uniqueStorageAccountContainerName": "exdevsc",
         "location": "[resourceGroup().location]",
         "vmOsSku": "2019-Datacenter",
-        "vmAdminUsername": "appriverAzure",
-        "vmAdminPassword": "!96En0va$Azure",
         "vmName": "exdevVM",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
@@ -173,8 +183,8 @@
                 },
                 "osProfile": {
                     "computerName": "[variables('vmName')]",
-                    "adminUsername": "[variables('vmAdminUsername')]",
-                    "adminPassword": "[variables('vmAdminPassword')]"
+                    "adminUsername": "[parameters('vmAdminUsername')]",
+                    "adminPassword": "[parameters('vmAdminPassword')]"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -273,7 +283,7 @@
                         "DomainName": "[variables('exchangeDomainName')]",
                         "StorageSize": "[parameters('exchangeStorageSizeInGB')]",
                         "VMAdminCreds": {
-                            "userName": "[variables('vmAdminUsername')]",
+                            "userName": "[parameters('vmAdminUsername')]",
                             "password": "PrivateSettingsRef:vmAdminPassword"
                         },
                         "Location": "[variables('location')]"
@@ -281,7 +291,7 @@
                 },
                 "protectedSettings": {
                     "items": {
-                        "vmAdminPassword": "[variables('vmAdminPassword')]"
+                        "vmAdminPassword": "[parameters('vmAdminPassword')]"
                     },
                     "DataBlobUri": "[variables('modulesUrlExchangeData')]"
                 }
