@@ -20,7 +20,13 @@
         "metadata": {
             "description": "The password for the administrator account of the new VM and domain"
             }
-        }
+        },
+    "exchangeDomainName": {
+            "type": "string",
+            "metadata": {
+                "description": "Domain Name you want to use."
+                }
+            }
     },
     "variables": {
         "exchangeVMCount": 1,
@@ -32,13 +38,12 @@
         "publicIPAddressType": "Dynamic",
         "subnetPrefix": "10.0.0.0/24",
         "subnetName": "[tolower(concat('sn', resourceGroup().name))]",
-        "exchangeDomainName": "EXGAppriverDEV.test",
         "uniqueDnsNameForPublicIP": "[tolower(concat('dns', resourceGroup().name))]",
-        "uniqueStorageAccountName": "exdevsa",
-        "uniqueStorageAccountContainerName": "exdevsc",
+        "uniqueStorageAccountName": "[tolower(concat('exdevsa',resourceGroup().name))]",
+        "uniqueStorageAccountContainerName": "[tolower(concat('exdevsc',resourceGroup().name))]",
         "location": "[resourceGroup().location]",
         "vmOsSku": "2019-Datacenter",
-        "vmName": "exdevVM",
+        "vmName": "[tolower(concat('exdevVM',resourceGroup().name))]",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
         "vmSize": "Standard_D3_v2",
@@ -280,7 +285,7 @@
                     "modulesUrl": "[variables('modulesUrlExchange')]",
                     "configurationFunction": "[variables('configurationFunctionExchange')]",
                     "properties": {
-                        "DomainName": "[variables('exchangeDomainName')]",
+                        "DomainName": "[parameters('exchangeDomainName')]",
                         "StorageSize": "[parameters('exchangeStorageSizeInGB')]",
                         "VMAdminCreds": {
                             "userName": "[parameters('vmAdminUsername')]",

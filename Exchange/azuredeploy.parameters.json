@@ -3,7 +3,29 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "exchangeStorageSizeInGB": {
-            "value": 10
+            "type": "int",
+            "defaultValue": 10,
+            "metadata": {
+                "description": "Exchange Mailbox storage size in GB."
+            }
+        },
+        "vmAdminUsername": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the administrator account of the new VM and domain"
+                }
+        },
+        "vmAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The password for the administrator account of the new VM and domain"
+                }
+        },
+        "exchangeDomainName": {
+                "type": "string",
+                "metadata": {
+                    "description": "Domain Name you want to use."
+                    }
         }
     }
 }
