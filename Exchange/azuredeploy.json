@@ -43,7 +43,7 @@
         "uniqueStorageAccountContainerName": "[tolower(concat('exdevsc',uniqueString(resourceGroup().id)))]",
         "location": "[resourceGroup().location]",
         "vmOsSku": "2019-Datacenter",
-        "vmName": "[tolower(concat('exdevVM',resourceGroup().name))]",
+        "vmName": "exdevVM",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
         "vmSize": "Standard_D3_v2",
