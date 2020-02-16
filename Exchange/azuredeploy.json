@@ -46,7 +46,7 @@
         "vmName": "exdevVM",
         "vmOsDiskName": "[concat('od', resourceGroup().name)]",
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
-        "vmSize": "Standard_D3_v2",
+        "vmSize": "Standard_D3_v3",
         "vmDataDiskSize": "15",
         "vmNicName": "[tolower(concat('nc', resourceGroup().name))]",
         "virtualNetworkName": "[tolower(concat('vn', resourceGroup().name))]",
