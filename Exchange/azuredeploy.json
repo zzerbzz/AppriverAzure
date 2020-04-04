@@ -93,84 +93,6 @@
         },
         {
             "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "name": "[variables('nsgName')]",
-            "location": "[variables('location')]",
-            "properties": {
-                "securityRules": [
-                    {
-                        "name": "nsgsrule",
-                        "properties": {
-                            "protocol": "*",
-                            "sourcePortRange": "*",
-                            "destinationPortRange": "*",
-                            "sourceAddressPrefix": "*",
-                            "destinationAddressPrefix": "*",
-                            "access": "Allow",
-                            "priority": 101,
-                            "direction": "Inbound"
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[variables('virtualNetworkName')]",
-            "location": "[variables('location')]",
-            "dependsOn": [ "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]" ],
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "[variables('addressPrefix')]"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "[variables('subnetName')]",
-                        "properties": {
-                            "addressPrefix": "[variables('subnetPrefix')]",
-                            "networkSecurityGroup": {
-                                "id": "[variables('nsgID')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(variables('vmNicName'),copyIndex())]",
-            "location": "[variables('location')]",
-            "copy": {
-                "name": "nicLoop",
-                "count": "[variables('exchangeVMCount')]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]",
-                "[concat('Microsoft.Network/virtualNetworks/',variables('virtualNetworkName'))]"
-            ],
-            "properties": {
-                "ipConfigurations": [
-                    {
-                        "name": "ipconfigpublic",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"
-                            },
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            }
-                        }
-                    }
-                ]
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(variables('vmName'),copyIndex())]",
             "location": "[variables('location')]",
@@ -178,10 +100,6 @@
                 "name": "vmLoop",
                 "count": "[variables('exchangeVMCount')]"
             },
-            "dependsOn": [
-                "[concat('Microsoft.Storage/storageAccounts/',variables('uniqueStorageAccountName'))]",
-                "[concat('Microsoft.Network/networkInterfaces/',variables('vmNicName'),copyIndex())]"
-            ],
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[variables('vmSize')]"
@@ -229,13 +147,6 @@
                         }
                     ]
                 },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNicName'),copyIndex()))]"
-                        }
-                    ]
-                }
             }
         },
 		{
