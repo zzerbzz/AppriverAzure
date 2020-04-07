@@ -32,12 +32,12 @@
         "exchangeVMCount": 1,
         "imagePublisher": "MicrosoftWindowsServer",
         "imageOffer": "WindowsServer",
-        "addressPrefix": "10.0.0.0/16",
+        "addressPrefix": "10.80.26.0/23",
         "storageAccountType": "Standard_LRS",
         "publicIPAddressName": "[tolower(concat('ip', resourceGroup().name))]",
         "publicIPAddressType": "Dynamic",
-        "subnetPrefix": "10.0.0.0/24",
-        "subnetName": "[tolower(concat('sn', resourceGroup().name))]",
+        "subnetPrefix": "10.80.26.0/23",
+        "subnetName": "ad-servicesubnet",
         "uniqueDnsNameForPublicIP": "[tolower(concat('dns', resourceGroup().name))]",
         "uniqueStorageAccountName": "[tolower(concat('exdevsa',uniqueString(resourceGroup().id)))]",
         "uniqueStorageAccountContainerName": "[tolower(concat('exdevsc',uniqueString(resourceGroup().id)))]",
@@ -49,7 +49,7 @@
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
         "vmNicName": "[tolower(concat('nc', resourceGroup().name))]",
-        "virtualNetworkName": "[tolower(concat('vn', resourceGroup().name))]",
+        "virtualNetworkName": "aazeastus-appslab-vnet",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
         "modulesPath": "https://raw.githubusercontent.com/zzerbzz/AppriverAzure/master/Exchange/",
@@ -58,8 +58,6 @@
         "modulesExchangeData": "ExchangeWorkload.psd1",
         "modulesUrlExchangeData": "[concat(variables('modulesPath'),variables('modulesExchangeData'))]",
         "configurationFunctionExchange": "ExchangeWorkload.ps1\\InstallAndConfigureExchange",
-        "nsgName": "[tolower(concat('ng', resourceGroup().name))]",
-        "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
         "exchangeInstallerPath": "InstallerExchange",
         "exchangeISOUri": "https://downloadscfa.blob.core.windows.net/downloads/Exchange/ExchangeServer2019-x64-CU2.iso",
         "modulesExchangeISODownload": "CSDownloadISO.ps1",
@@ -146,7 +144,7 @@
                             "lun": 1
                         }
                     ]
-                },
+                }
             }
         },
 		{
