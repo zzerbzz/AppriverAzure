@@ -50,6 +50,7 @@
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
         "vmNicName": "[tolower(concat('nic', resourceGroup().name))]",
+        "NicName": "[tolower(concat('nic', resourceGroup().name))]",
         "vNetNewOrExisting": "existing",
         "virtualNetworkName": "aazeastus-appslab-vnet",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
