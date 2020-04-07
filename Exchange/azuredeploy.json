@@ -50,7 +50,6 @@
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
         "vmNicName": "[tolower(concat('nic', resourceGroup().name))]",
-        "NicName": "[tolower(concat('nic', resourceGroup().name))]",
         "vNetNewOrExisting": "existing",
         "virtualNetworkName": "aazeastus-appslab-vnet",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
@@ -90,34 +89,6 @@
                 "dnsSettings": {
                     "domainNameLabel": "[variables('uniqueDnsNameForPublicIP')]"
                 }
-            }
-        },
-        {
-            "apiVersion": "2018-04-01",
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[variables('VMNicName')]",
-            "location": "[variables('location')]",
-            "dependsOn": [
-                "[variables('publicIPAddressName')]"
-            ],
-            "tags": {
-                "displayName": "NetworkInterface"
-            },
-            "properties": {
-                "ipConfigurations": [
-                {
-                    "name": "ipconfig1",
-                    "properties": {
-                    "privateIPAllocationMethod": "Dynamic",
-                    "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
-                    },
-                    "subnet": {
-                        "id": "[variables('subnetRef')]"
-                    }
-                    }
-                }
-                ]
             }
         },
         {
