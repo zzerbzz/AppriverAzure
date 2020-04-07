@@ -48,7 +48,7 @@
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
-        "vmNicName": "[tolower(concat('nc', resourceGroup().name))]",
+        "vmNicName": "[tolower(concat('nic', resourceGroup().name))]",
         "virtualNetworkName": "aazeastus-appslab-vnet",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
@@ -144,6 +144,13 @@
                             "lun": 1
                         }
                     ]
+                },
+                "networkProfile": {	
+                    "networkInterfaces": [	
+                        {	
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNicName'),copyIndex()))]"	
+                        }	
+                    ]	
                 }
             }
         },
