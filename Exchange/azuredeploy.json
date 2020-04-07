@@ -92,6 +92,34 @@
             }
         },
         {
+            "apiVersion": "2018-04-01",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[variables('nicName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[variables('publicIPAddressName')]"
+            ],
+            "tags": {
+                "displayName": "NetworkInterface"
+            },
+            "properties": {
+                "ipConfigurations": [
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                    "privateIPAllocationMethod": "Dynamic",
+                    "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+                    },
+                    "subnet": {
+                        "id": "[variables('subnetRef')]"
+                    }
+                    }
+                }
+                ]
+            }
+        },
+        {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[concat(variables('vmName'),copyIndex())]",
@@ -144,20 +172,6 @@
                             "caching": "None",
                             "diskSizeGB": "[variables('vmDataDiskSize')]",
                             "lun": 1
-                        }
-                    ],
-                    "ipConfigurations": [
-                        {
-                            "name": "ipconfig1",
-                            "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
-                            },
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            }
-                            }
                         }
                     ]
                 },
