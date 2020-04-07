@@ -28,6 +28,7 @@
                 }
             }
     },
+
     "variables": {
         "exchangeVMCount": 1,
         "imagePublisher": "MicrosoftWindowsServer",
@@ -49,6 +50,7 @@
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
         "vmNicName": "[tolower(concat('nic', resourceGroup().name))]",
+        "vNetNewOrExisting": "existing",
         "virtualNetworkName": "aazeastus-appslab-vnet",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables('subnetName'))]",
@@ -143,14 +145,28 @@
                             "diskSizeGB": "[variables('vmDataDiskSize')]",
                             "lun": 1
                         }
+                    ],
+                    "ipConfigurations": [
+                        {
+                            "name": "ipconfig1",
+                            "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            }
+                            }
+                        }
                     ]
                 },
-                "networkProfile": {	
-                    "networkInterfaces": [	
-                        {	
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces',concat(variables('vmNicName'),copyIndex()))]"	
-                        }	
-                    ]	
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vmNicName'))]"
+                        }
+                    ]
                 }
             }
         },
