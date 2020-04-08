@@ -45,6 +45,7 @@
         "vmDataDiskName": "[concat('dd', resourceGroup().name)]",
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
+        "dnsserver": "127.0.0.1",
         "vmNicName": "[tolower(concat('nic', resourceGroup().name))]",
         "virtualNetworkName": "azeastus-appslab-vnet",
         "virtualNetworkRG": "azeastus-appslab-vnet-rg",
@@ -73,171 +74,24 @@
         },
         {
             "apiVersion": "2015-06-15",
-            "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[variables('publicIPAddressName')]",
-            "location": "[variables('location')]",
-            "tags": {
-                "displayName": "PublicIPAddress"
-            },
-            "properties": {
-                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
-            }
-            },
-            {
-            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('VMNicName')]",
             "location": "[variables('location')]",
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]"
-            ],
-            "tags": {
-                "displayName": "NetworkInterface"
-            },
             "properties": {
+                "dnsSettings": {
+                    "dnsServers": [ "[variables('dnsserver')]" ]
+                },
                 "ipConfigurations": [
                 {
                     "name": "ipconfig1",
                     "properties": {
                     "privateIPAllocationMethod": "Dynamic",
-                    "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
-                    },
                     "subnet": {
                         "id": "[variables('subnetRef')]"
                     }
                     }
                 }
                 ]
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines",
-            "name": "[concat(variables('vmName'),copyIndex())]",
-            "location": "[variables('location')]",
-            "copy": {
-                "name": "vmLoop",
-                "count": "[variables('exchangeVMCount')]"
-            },
-            "properties": {
-                "hardwareProfile": {
-                    "vmSize": "[variables('vmSize')]"
-                },
-                "osProfile": {
-                    "computerName": "[variables('vmName')]",
-                    "adminUsername": "[parameters('vmAdminUsername')]",
-                    "adminPassword": "[parameters('vmAdminPassword')]"
-                },
-                "storageProfile": {
-                    "imageReference": {
-                        "publisher": "[variables('imagePublisher')]",
-                        "offer": "[variables('imageOffer')]",
-                        "sku": "[variables('vmOsSku')]",
-                        "version": "latest"
-                    },
-                    "osDisk": {
-                        "name": "osdisk",
-                        "vhd": {
-                            "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmOsDiskName'),copyIndex(),'.vhd')]"
-                        },
-                        "caching": "ReadWrite",
-                        "createOption": "FromImage"
-                    },
-                    "dataDisks": [
-                        {
-                            "vhd": {
-                                "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmDataDiskName'),copyIndex(),'-0','.vhd')]"
-                            },
-                            "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-0')]",
-                            "createOption": "Empty",
-                            "caching": "None",
-                            "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 0
-                        },
-                        {
-                            "vhd": {
-                                "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmDataDiskName'),copyIndex(),'-1','.vhd')]"
-                            },
-                            "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-1')]",
-                            "createOption": "Empty",
-                            "caching": "None",
-                            "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 1
-                        }
-                    ]
-                },
-                "networkProfile": {
-                    "networkInterfaces": [
-                        {
-                        "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('vmNicName'))]"
-                        }
-                    ]
-                }
-            }
-        },
-		{
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmName'),copyIndex(),'/CustomScriptExtension')]",
-            "location": "[variables('location')]",
-            "copy": {
-                "name": "customExtensionLoop",
-                "count": "[variables('exchangeVMCount')]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),copyIndex())]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Compute",
-                "type": "CustomScriptExtension",
-                "typeHandlerVersion": "1.4",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "fileUris": [
-                        "[variables('modulesUrlExchangeISODownload')]"
-                    ],
-                    "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -file ',variables('modulesExchangeISODownload'),' -uri ',variables('exchangeISOUri'),' -destination ',variables('exchangeInstallerPath'))]"
-                }
-            }
-        },
-        {
-            "apiVersion": "2015-06-15",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(variables('vmName'),copyIndex(),'/dscExtension')]",
-            "location": "[variables('location')]",
-            "copy": {
-                "name": "extensionLoop",
-                "count": "[variables('exchangeVMCount')]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),copyIndex())]",
-				"[concat('Microsoft.Compute/virtualMachines/',variables('vmName'),copyIndex(),'/extensions/','CustomScriptExtension')]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.Powershell",
-                "type": "DSC",
-                "typeHandlerVersion": "2.15",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "modulesUrl": "[variables('modulesUrlExchange')]",
-                    "configurationFunction": "[variables('configurationFunctionExchange')]",
-                    "properties": {
-                        "DomainName": "[parameters('exchangeDomainName')]",
-                        "StorageSize": "[parameters('exchangeStorageSizeInGB')]",
-                        "VMAdminCreds": {
-                            "userName": "[parameters('vmAdminUsername')]",
-                            "password": "PrivateSettingsRef:vmAdminPassword"
-                        },
-                        "Location": "[variables('location')]"
-                    }
-                },
-                "protectedSettings": {
-                    "items": {
-                        "vmAdminPassword": "[parameters('vmAdminPassword')]"
-                    },
-                    "DataBlobUri": "[variables('modulesUrlExchangeData')]"
-                }
             }
         }
     ]
