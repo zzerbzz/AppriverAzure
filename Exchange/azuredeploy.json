@@ -95,6 +95,10 @@
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('VMNicName')]",
             "location": "[variables('location')]",
+            "copy": {	
+                "name": "nicLoop",	
+                "count": "[variables('exchangeVMCount')]"	
+            },	
             "dependsOn": [	
                 "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]"
             ],	
