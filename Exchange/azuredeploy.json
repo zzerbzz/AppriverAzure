@@ -107,7 +107,7 @@
                     {	
                         "name": "ipconfigpublic",	
                         "properties": {	
-                            "privateIPAllocationMethod": "Dynamic",	
+                            "PublicIPAllocationMethod": "Dynamic",	
                             "publicIPAddress": {	
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName')))]"	
                             },	
