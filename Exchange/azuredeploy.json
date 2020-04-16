@@ -95,27 +95,20 @@
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('VMNicName')]",
             "location": "[variables('location')]",
-            "copy": {
-                "name": "nicLoop",
-                "count": "[variables('exchangeVMCount')]"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]"
-            ],
             "properties": {
+                "dnsSettings": {
+                    "dnsServers": [ "[variables('dnsserver')]" ]
+                },
                 "ipConfigurations": [
-                    {
-                        "name": "ipconfigpublic",
-                        "properties": {
-                            "privateIPAllocationMethod": "Dynamic",
-                            "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"
-                            },
-                            "subnet": {
-                                "id": "[variables('subnetRef')]"
-                            }
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+                        "subnet": {
+                        "id": "[variables('subnetRef')]"
                         }
                     }
+                }
                 ]
             }
         },
