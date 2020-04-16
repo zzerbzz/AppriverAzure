@@ -51,7 +51,7 @@
         "vmNicName": "[tolower(concat('nic-',replace(variables('resourceGroup'),'-rg','')))]",
         "virtualNetworkName": "azeastus-appslab-vnet",
         "virtualNetworkRG": "azeastus-appslab-vnet-rg",
-        "virtualNetworkSubnet" : "public-subnet-nsg",
+        "virtualNetworkSubnet" : "public-subnet",
         "subnetRef": "[resourceId(variables('virtualNetworkRG'), 'Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'),  variables('virtualNetworkSubnet'))]",
         "modulesPath": "https://raw.githubusercontent.com/zzerbzz/AppriverAzure/master/Exchange/",
         "modulesExchange": "ExchangeWorkload.zip",
