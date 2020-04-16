@@ -100,7 +100,7 @@
                 "count": "[variables('exchangeVMCount')]"	
             },	
             "dependsOn": [	
-                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'))]"
+                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]"
             ],	
             "properties": {	
                 "ipConfigurations": [	
