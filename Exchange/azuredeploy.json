@@ -74,7 +74,7 @@
                 "accountType": "[variables('storageAccountType')]"
             }
         },
-         {
+        {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[concat(variables('publicIPAddressName'),copyIndex())]",
@@ -107,6 +107,7 @@
                     "name": "ipconfig1",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
                         "publicIPAddress": {	
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"	
                         },	
