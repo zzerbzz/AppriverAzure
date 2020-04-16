@@ -45,6 +45,8 @@
         "vmSize": "Standard_D4_v3",
         "vmDataDiskSize": "15",
         "dnsserver": "127.0.0.1",
+        "nsgName": "public-subnet-nsg",
+        "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
         "publicIPAddressName": "[tolower(concat('ip-', replace(variables('resourceGroup'),'-','')))]",
         "publicIPAddressType": "Dynamic",
         "uniqueDnsNameForPublicIP": "[tolower(concat('dns-', replace(variables('resourceGroup'),'-','')))]",
@@ -110,7 +112,10 @@
                             "PublicIPAllocationMethod": "Dynamic",	
                             "publicIPAddress": {	
                                 "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName')))]"	
-                            },	
+                            },
+                            "networkSecurityGroup": {
+                                "id": "[variables('nsgID')]"
+                            },
                             "subnet": {	
                                 "id": "[variables('subnetRef')]"	
                             }	
