@@ -90,31 +90,36 @@
                 }
             }
         },
-        {
+         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('VMNicName')]",
             "location": "[variables('location')]",
-            "dependsOn": [	
-                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]"	
-            ],	
+            "copy": {
+                "name": "nicLoop",
+                "count": "[variables('exchangeVMCount')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]",
+            ],
             "properties": {
-                "dnsSettings": {
-                    "dnsServers": [ "[variables('dnsserver')]" ]
-                },
                 "ipConfigurations": [
-                {
-                    "name": "ipconfig1",
-                    "properties": {
-                        "privateIPAllocationMethod": "Dynamic",
-                        "subnet": {
-                        "id": "[variables('subnetRef')]"
+                    {
+                        "name": "ipconfigpublic",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"
+                            },
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            }
                         }
                     }
-                }
                 ]
             }
         },
+
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines",
