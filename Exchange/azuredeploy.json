@@ -74,27 +74,46 @@
                 "accountType": "[variables('storageAccountType')]"
             }
         },
+         {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[concat(variables('publicIPAddressName'),copyIndex())]",
+            "location": "[variables('location')]",
+            "copy": {
+                "name": "publicIPLoop",
+                "count": "[variables('exchangeVMCount')]"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+                "dnsSettings": {
+                    "domainNameLabel": "[variables('uniqueDnsNameForPublicIP')]"
+                }
+            }
+        },
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('VMNicName')]",
             "location": "[variables('location')]",
-            "properties": {
-                "dnsSettings": {
-                    "dnsServers": [ "[variables('dnsserver')]" ]
-                },
-                "ipConfigurations": [
-                {
-                    "name": "ipconfig1",
-                    "properties": {
-                        "PublicIPAllocationMethod": "Dynamic",
-                        "subnet": {
-                        "id": "[variables('subnetRef')]"
-                        }
-                    }
-                }
-                ]
-            }
+            "dependsOn": [	
+                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]"
+            ],	
+            "properties": {	
+                "ipConfigurations": [	
+                    {	
+                        "name": "ipconfigpublic",	
+                        "properties": {	
+                            "privateIPAllocationMethod": "Dynamic",	
+                            "publicIPAddress": {	
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"	
+                            },	
+                            "subnet": {	
+                                "id": "[variables('subnetRef')]"	
+                            }	
+                        }	
+                    }	
+                ]	
+            }	
         },
         {
             "apiVersion": "2015-06-15",
