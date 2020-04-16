@@ -107,10 +107,6 @@
                     "name": "ipconfig1",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
-                        "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-                        "publicIPAddress": {	
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"	
-                        },	
                         "subnet": {
                         "id": "[variables('subnetRef')]"
                         }
