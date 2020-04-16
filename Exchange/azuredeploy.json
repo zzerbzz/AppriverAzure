@@ -74,23 +74,23 @@
                 "accountType": "[variables('storageAccountType')]"
             }
         },
-       {
-            "apiVersion": "2018-04-01",
+        {
+            "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/networkInterfaces",
             "name": "[variables('VMNicName')]",
             "location": "[variables('location')]",
             "properties": {
+                "dnsSettings": {
+                    "dnsServers": [ "[variables('dnsserver')]" ]
+                },
                 "ipConfigurations": [
                 {
                     "name": "ipconfig1",
                     "properties": {
-                    "privateIPAllocationMethod": "Dynamic",
-                    "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
-                    },
-                    "subnet": {
+                        "PublicIPAllocationMethod": "Dynamic",
+                        "subnet": {
                         "id": "[variables('subnetRef')]"
-                    }
+                        }
                     }
                 }
                 ]
