@@ -119,7 +119,6 @@
                 ]
             }
         },
-
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Compute/virtualMachines",
