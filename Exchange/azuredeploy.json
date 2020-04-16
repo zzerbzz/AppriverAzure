@@ -100,7 +100,7 @@
                 "count": "[variables('exchangeVMCount')]"	
             },	
             "dependsOn": [	
-                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'),copyIndex())]"
+                "[concat('Microsoft.Network/publicIPAddresses/',variables('publicIPAddressName'))]"
             ],	
             "properties": {	
                 "ipConfigurations": [	
@@ -109,7 +109,7 @@
                         "properties": {	
                             "privateIPAllocationMethod": "Dynamic",	
                             "publicIPAddress": {	
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName'),copyIndex()))]"	
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('publicIPAddressName')))]"	
                             },	
                             "subnet": {	
                                 "id": "[variables('subnetRef')]"	
