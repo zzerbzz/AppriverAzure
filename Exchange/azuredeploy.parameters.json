@@ -4,7 +4,7 @@
     "parameters": {
         "exchangeStorageSizeInGB": {
             "type": "int",
-            "defaultValue": 10,
+            "defaultValue": 30,
             "metadata": {
                 "description": "Exchange Mailbox storage size in GB."
             }
