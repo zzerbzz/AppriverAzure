@@ -43,7 +43,7 @@
         "vmOsDiskName": "[concat('od-', replace(variables('resourceGroup'),'-rg',''))]",
         "vmDataDiskName": "[concat('dd-', replace(variables('resourceGroup'),'-rg',''))]",
         "vmSize": "Standard_D4_v3",
-        "vmDataDiskSize": "15",
+        "vmDataDiskSize": "30",
         "dnsserver": "127.0.0.1",
         "nsgName": "public-subnet-nsg",
         "nsgID": "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsgName'))]",
@@ -156,29 +156,7 @@
                         },
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
-                    },
-                    "dataDisks": [
-                        {
-                            "vhd": {
-                                "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmDataDiskName'),copyIndex(),'-0','.vhd')]"
-                            },
-                            "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-0')]",
-                            "createOption": "Empty",
-                            "caching": "None",
-                            "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 0
-                        },
-                        {
-                            "vhd": {
-                                "uri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStorageAccountName')),providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob,variables('uniqueStorageAccountContainerName'),'/',variables('vmDataDiskName'),copyIndex(),'-1','.vhd')]"
-                            },
-                            "name": "[concat(variables('vmDataDiskName'),copyIndex(),'-1')]",
-                            "createOption": "Empty",
-                            "caching": "None",
-                            "diskSizeGB": "[variables('vmDataDiskSize')]",
-                            "lun": 1
-                        }
-                    ]
+                    }
                 },
                 "networkProfile": {
                     "networkInterfaces": [
